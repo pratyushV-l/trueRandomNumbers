@@ -1,6 +1,9 @@
 import time
+import random
 import requests
 from flask import Flask, render_template_string
+
+# Please go through this code carefully, look out for comments otherwise it won't work
 
 app = Flask(__name__)
 
@@ -14,17 +17,29 @@ def get_external_random_number():
     else:
         return 0  # Fallback in case of API failure
 
-def generate_random_number():
+def get_solar_radiation(lat, lon, api_key):
+    url = f'https://api.openweathermap.org/data/2.5/solar_radiation?lat={lat}&lon={lon}&appid={api_key}'
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return data['global_horizontal_irradiance']
+    else:
+        return 0  # Fallback in case of API failure(Warning you don't forget)
+
+def generate_random_number(api_key):
     uptime = get_system_uptime()
     external_random = get_external_random_number()
+    solar_radiation = get_solar_radiation(12.9716, 77.5946, api_key)  # Example coordinates for Bengaluru - Please redo for yours
     current_time = time.time()
-    seed = int((uptime + external_random + current_time) * 1000) % 100
+    random_factor = random.random()
+    seed = int((uptime + external_random + solar_radiation + current_time + random_factor) * 1000) % 100
     random_number = (seed * 9301 + 49297) % 233280
     return random_number / 233280
 
 @app.route('/')
 def index():
-    random_number = generate_random_number()
+    api_key = 'your_openweathermap_api_key'  # Replace with your actual API key(It won't work if you don't)
+    random_number = generate_random_number(api_key)
     return render_template_string('''
         <!doctype html>
         <html lang="en">
