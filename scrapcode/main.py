@@ -25,7 +25,7 @@ def get_solar_radiation(lat, lon, api_key):
         return 0  # Fallback in case of API failure
 
 def get_stock_price(symbol):
-    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=your_finnhub_api_key'
+    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=key'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
@@ -60,12 +60,12 @@ def get_astronomy_data(api_key):
     else:
         return 0  # Fallback in case of API failure
 
-def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key):
+def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon):
     uptime = get_system_uptime()
     external_random = get_external_random_number()
-    solar_radiation = get_solar_radiation(12.9716, 77.5946, api_key)  # Example coordinates for Bengaluru
+    solar_radiation = get_solar_radiation(lat, lon, api_key)
     stock_price = get_stock_price(stock_symbol)
-    traffic_speed = get_traffic_data(12.9716, 77.5946, traffic_api_key) #Also example for Bengaluru
+    traffic_speed = get_traffic_data(lat, lon, traffic_api_key)
     news_headlines = get_news_headlines(news_api_key)
     astronomy_val = get_astronomy_data(astronomy_api_key)
     current_time = time.time()
@@ -76,16 +76,21 @@ def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key,
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    api_key = 'your_openweather_api_key'  # Replace with your actual API key
-    traffic_api_key = 'your_tomtom_api_key'
-    news_api_key = 'your_news_api_api_key
-    astronomy_api_key = 'your_nasa_api_key'
+    api_key = 'key'  # Replace with your actual API key
+    traffic_api_key = 'key'
+    news_api_key = 'key'
+    astronomy_api_key = 'key'
 
     stock_symbol = 'AAPL'  # Default value
+    lat = '12.9716'  # Default latitude (Bengaluru)
+    lon = '77.5946'  # Default longitude (Bengaluru)
+
     if request.method == 'POST':
         stock_symbol = request.form.get('stock_symbol', 'AAPL').upper()
+        lat = request.form.get('latitude', '12.9716')
+        lon = request.form.get('longitude', '77.5946')
 
-    random_number = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key)
+    random_number = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon)
     return render_template_string('''
         <!doctype html>
         <html lang="en">
@@ -146,13 +151,17 @@ def index():
               <form method="post">
                 <input type="text" name="stock_symbol" placeholder="Enter stock symbol (e.g., AAPL)" value="{{ stock_symbol }}">
                 <br>
+                <input type="text" name="latitude" placeholder="Enter latitude" value="{{ lat }}">
+                <br>
+                <input type="text" name="longitude" placeholder="Enter longitude" value="{{ lon }}">
+                <br>
                 <button type="submit">Generate Number</button>
               </form>
               <p>Random Number: {{ random_number }}</p>
             </div>
           </body>
         </html>
-    ''', random_number=random_number, stock_symbol=stock_symbol)
+    ''', random_number=random_number, stock_symbol=stock_symbol, lat=lat, lon=lon)
 
 if __name__ == '__main__':
     app.run(debug=True)
