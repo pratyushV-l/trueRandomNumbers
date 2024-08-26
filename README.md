@@ -9,3 +9,5 @@ I want to make a python-flask web app, that takes in random inputs from the user
 
 ## How to Use
 This repo is mainly for documenting progress and storing raw code, meaning you can still run the project locally, and by yourself. However, since everyone may not be able to run the code, I decided to turn this webapp into a website(using pythonanywhere.com). This will allow me to share the project more effectively with you guys(but please feel free to run the source code yourself)!. **LINK: [pratyushv1.pythonanywhere.com](https://pratyushv1.pythonanywhere.com/)**
+
+-oh btw, AI was used for the ideas, nothing else!!!
