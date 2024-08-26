@@ -25,7 +25,7 @@ def get_solar_radiation(lat, lon, api_key):
         return 0  # Fallback in case of API failure
 
 def get_stock_price(symbol):
-    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=cr67441r01qgfrnmjoqgcr67441r01qgfrnmjor0'
+    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=your_api_token_for_finnhub'
     response = requests.get(url)
     if response.status_code == 200:
         data = response()
