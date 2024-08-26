@@ -25,7 +25,7 @@ def get_solar_radiation(lat, lon, api_key):
         return 0  # Fallback in case of API failure
 
 def get_stock_price(symbol):
-    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=put_in_your_api_key'
+    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=api_key'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
@@ -50,27 +50,38 @@ def get_news_headlines(api_key):
         return len(data['articles'])  # Number of articles
     else:
         return 0  # Fallback in case of API failure
+    
+def get_astronomy_data(api_key):
+    url = f'https://api.nasa.gov/planetary/apod?api_key={api_key}'
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return len(data['title'])  # Length of the title of the picture of the day
+    else:
+        return 0  # Fallback in case of API failure
 
-def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key):
+def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key):
     uptime = get_system_uptime()
     external_random = get_external_random_number()
     solar_radiation = get_solar_radiation(12.9716, 77.5946, api_key)  # Example coordinates for Bengaluru
     stock_price = get_stock_price(stock_symbol)
     traffic_speed = get_traffic_data(12.9716, 77.5946, traffic_api_key) #Also expample for Bengaluru
     news_headlines = get_news_headlines(news_api_key)
+    astronomy_val = get_astronomy_data(astronomy_api_key)
     current_time = time.time()
     random_factor = random.random()
-    seed = int((uptime + external_random + traffic_speed + news_headlines + solar_radiation + stock_price + current_time + random_factor) * 1000) % 100
+    seed = int((uptime + external_random + traffic_speed + news_headlines + astronomy_val + solar_radiation + stock_price + current_time + random_factor) * 1000) % 100
     random_number = (seed * 9301 + 49297) % 233280 # Oh yeah, sry forgot to mention, to add to the randomness, i added a few random numbers here at the beginning
     return random_number / 233280
 
 @app.route('/')
 def index():
-    api_key = 'your_openweather_api_key'  # Replace with your actual API key
-    stock_symbol = 'AAPL'
-    traffic_api_key = 'your_tomtom_api_key'
-    news_api_key = 'your_news_api_api_key(meant to type api twice btw)'
-    random_number = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key)
+    api_key = 'api'  # Replace with your actual API key
+    stock_symbol = 'AAPL' #Honestly, can be your choice
+    traffic_api_key = 'api'
+    news_api_key = 'api'
+    astronomy_api_key = 'api'
+    random_number = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key)
     return render_template_string('''
         <!doctype html>
         <html lang="en">
