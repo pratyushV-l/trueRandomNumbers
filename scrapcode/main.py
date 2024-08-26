@@ -37,7 +37,7 @@ def generate_random_number(api_key):
 @app.route('/')
 def index():
     api_key = 'your_openweathermap_api_key'  # Replace with your actual API key
-    random_number = generate_random_number(api_key)
+    random_number = generate_random_number(api_key) # Excuse me for the horrendous code hereafter, it is the easiest way to delpoy for me
     return render_template_string('''
         <!doctype html>
         <html lang="en">
@@ -94,5 +94,4 @@ def index():
         </html>
     ''', random_number=random_number)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# Removed the app.run() line - for the pythonanwhere part
