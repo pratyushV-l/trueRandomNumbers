@@ -1,6 +1,9 @@
 # trueRandomNumbers
 An actually random number generator: [pratyushv1.pythonanywhere.com](https://pratyushv1.pythonanywhere.com/)
 
+>Randomness in Human, Humans are Random
+  -by ME
+
 ## Some Backstory...
 I recently read about how CloudFlare(An international security company) needed a solution for getting random input for their traffic generators. This lead me down a rabbit-hole of random number generators, particularly in computing, as I figured out it is impossible to truly generate random numbers just by algorithms. I learned, that in modern times, there are external factors(such as radiation in the air) to assist in calculating random numbers! I wanted to replicate this for those of us who don't have radiation sensors lying around, bringing us to this project.
 
