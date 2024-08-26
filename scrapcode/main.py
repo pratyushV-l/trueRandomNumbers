@@ -25,7 +25,7 @@ def get_solar_radiation(lat, lon, api_key):
         return 0  # Fallback in case of API failure
 
 def get_stock_price(symbol):
-    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=cr67dg9r01qnuep51fb0cr67dg9r01qnuep51fbg'
+    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=your_finhubb_api_key'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
@@ -36,16 +36,21 @@ def get_stock_price(symbol):
 def get_traffic_data(lat, lon, api_key):
     url = f'https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={lat},{lon}&key={api_key}'
     response = requests.get(url)
-
+    if response.status_code == 200:
+        data = response.json()
+        return data['flowSegmentData']['currentSpeed']
+    else:
+        return 0  # Fallback in case of API failure
 
 def generate_random_number(api_key, stock_symbol, traffic_api_key):
     uptime = get_system_uptime()
     external_random = get_external_random_number()
     solar_radiation = get_solar_radiation(12.9716, 77.5946, api_key)  # Example coordinates for Bengaluru
     stock_price = get_stock_price(stock_symbol)
+    traffic_speed = get_traffic_data(12.9716, 77.5946, traffic_api_key) #Also expample for Bengaluru
     current_time = time.time()
     random_factor = random.random()
-    seed = int((uptime + external_random + solar_radiation + stock_price + current_time + random_factor) * 1000) % 100
+    seed = int((uptime + external_random + traffic_speed + solar_radiation + stock_price + current_time + random_factor) * 1000) % 100
     random_number = (seed * 9301 + 49297) % 233280 # Oh yeah, sry forgot to mention, to add to the randomness, i added a few random numbers here at the beginning
     return random_number / 233280
 
@@ -53,7 +58,8 @@ def generate_random_number(api_key, stock_symbol, traffic_api_key):
 def index():
     api_key = 'your_openweathermap_api_key'  # Replace with your actual API key
     stock_symbol = 'AAPL'
-    random_number = generate_random_number(api_key, stock_symbol)
+    traffic_api_key = 'your_tomtom_api_key'
+    random_number = generate_random_number(api_key, stock_symbol, traffic_api_key)
     return render_template_string('''
         <!doctype html>
         <html lang="en">
