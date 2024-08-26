@@ -18,6 +18,7 @@ Now I am currently utilizing 5 APIs(that all contribute to the randomness):
   - OpenWeather: Provides Solar Radiation, which is updated every hour(I believe), allowing for further randomness
   - Finnhub: Provided detailes stock market tracking(in this case AAPL), and changes every hour, and as everyone knows, the most unpredictable thing in the world is the stock market.
   - NASA: NASA provides a astronomy photo of the day, meaning I can see the length of the photo, further contributing to the randomness, changing everyday!
+  - TomTom: Provides traffic data, and especially here is the default location(Bengaluru), it is definetly random
 
 -AI was used for the ideas, nothing else!!!(just for citation)
 
