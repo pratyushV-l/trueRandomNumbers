@@ -1,7 +1,7 @@
 import time
 import random
 import requests
-from flask import Flask, render_template_string
+from flask import Flask, render_template_string, request
 
 app = Flask(__name__)
 
@@ -25,7 +25,7 @@ def get_solar_radiation(lat, lon, api_key):
         return 0  # Fallback in case of API failure
 
 def get_stock_price(symbol):
-    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=api_key'
+    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=your_finnhub_api_key'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
@@ -65,22 +65,26 @@ def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key,
     external_random = get_external_random_number()
     solar_radiation = get_solar_radiation(12.9716, 77.5946, api_key)  # Example coordinates for Bengaluru
     stock_price = get_stock_price(stock_symbol)
-    traffic_speed = get_traffic_data(12.9716, 77.5946, traffic_api_key) #Also expample for Bengaluru
+    traffic_speed = get_traffic_data(12.9716, 77.5946, traffic_api_key) #Also example for Bengaluru
     news_headlines = get_news_headlines(news_api_key)
     astronomy_val = get_astronomy_data(astronomy_api_key)
     current_time = time.time()
     random_factor = random.random()
     seed = int((uptime + external_random + traffic_speed + news_headlines + astronomy_val + solar_radiation + stock_price + current_time + random_factor) * 1000) % 100
-    random_number = (seed * 9301 + 49297) % 233280 # Oh yeah, sry forgot to mention, to add to the randomness, i added a few random numbers here at the beginning
+    random_number = (seed * 9301 + 49297) % 233280
     return random_number / 233280
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    api_key = 'api'  # Replace with your actual API key
-    stock_symbol = 'AAPL' #Honestly, can be your choice
-    traffic_api_key = 'api'
-    news_api_key = 'api'
-    astronomy_api_key = 'api'
+    api_key = 'your_openweather_api_key'  # Replace with your actual API key
+    traffic_api_key = 'your_tomtom_api_key'
+    news_api_key = 'your_news_api_api_key
+    astronomy_api_key = 'your_nasa_api_key'
+
+    stock_symbol = 'AAPL'  # Default value
+    if request.method == 'POST':
+        stock_symbol = request.form.get('stock_symbol', 'AAPL').upper()
+
     random_number = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key)
     return render_template_string('''
         <!doctype html>
@@ -114,6 +118,14 @@ def index():
                 font-size: 1.5em;
                 margin-bottom: 20px;
               }
+              input[type="text"] {
+                padding: 10px;
+                font-size: 1em;
+                margin-bottom: 20px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                width: 200px;
+              }
               button {
                 background-color: #007bff;
                 color: white;
@@ -131,10 +143,16 @@ def index():
           <body>
             <div class="container">
               <h1>Random Number Generator</h1>
+              <form method="post">
+                <input type="text" name="stock_symbol" placeholder="Enter stock symbol (e.g., AAPL)" value="{{ stock_symbol }}">
+                <br>
+                <button type="submit">Generate Number</button>
+              </form>
               <p>Random Number: {{ random_number }}</p>
-              <button onclick="window.location.reload();">Generate New Number</button>
             </div>
           </body>
         </html>
-    ''', random_number=random_number)
+    ''', random_number=random_number, stock_symbol=stock_symbol)
 
+if __name__ == '__main__':
+    app.run(debug=True)
