@@ -24,20 +24,31 @@ def get_solar_radiation(lat, lon, api_key):
     else:
         return 0  # Fallback in case of API failure
 
-def generate_random_number(api_key):
+def get_stock_price(symbol):
+    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=cr67441r01qgfrnmjoqgcr67441r01qgfrnmjor0'
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response()
+        return data['p']  # Current price
+    else:
+        return 0  # Currently falling back in case of API failure
+
+def generate_random_number(api_key, stock_symbol):
     uptime = get_system_uptime()
     external_random = get_external_random_number()
     solar_radiation = get_solar_radiation(12.9716, 77.5946, api_key)  # Example coordinates for Bengaluru
+    stock_price = get_stock_price(stock_symbol)
     current_time = time.time()
     random_factor = random.random()
-    seed = int((uptime + external_random + solar_radiation + current_time + random_factor) * 1000) % 100
+    seed = int((uptime + external_random + solar_radiation + stock_price + current_time + random_factor) * 1000) % 100
     random_number = (seed * 9301 + 49297) % 233280
     return random_number / 233280
 
 @app.route('/')
 def index():
     api_key = 'your_openweathermap_api_key'  # Replace with your actual API key
-    random_number = generate_random_number(api_key) # Excuse me for the horrendous code hereafter, it is the easiest way to delpoy for me
+    stock_symbol = 'AAPL'  # Example stock symbol for Apple Inc.
+    random_number = generate_random_number(api_key, stock_symbol)
     return render_template_string('''
         <!doctype html>
         <html lang="en">
@@ -93,5 +104,3 @@ def index():
           </body>
         </html>
     ''', random_number=random_number)
-
-# Removed the app.run() line - for the pythonanwhere part
