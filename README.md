@@ -10,4 +10,13 @@ I want to make a python-flask web app, that takes in random inputs from the user
 ## How to Use
 This repo is mainly for documenting progress and storing raw code, meaning you can still run the project locally, and by yourself. However, since everyone may not be able to run the code, I decided to turn this webapp into a website(using pythonanywhere.com). This will allow me to share the project more effectively with you guys(but please feel free to run the source code yourself)!. **LINK: [pratyushv1.pythonanywhere.com](https://pratyushv1.pythonanywhere.com/)**
 
--oh btw, AI was used for the ideas, nothing else!!!
+## Interesting Stuff, that you probably don't need to know
+At the beginning of this project, I really wanted to make the random number individual to the user, so I started out with the idea of using the microphone and camera of the user to calculate ambient background effects, that would allow for a truly random number. However, I slowly started realizing that this project wouldn't be accessible if I did this, as there was always one dependency that cannot be transferred through operating systems. This lead me to start using APIs as they are a more simple(and arguably more random) way of getting numbers to input as my seed.
+
+Now I am currently utilizing 5 APIs(that all contribute to the randomness):
+  - Random.org: It just provided a random number everytime it is called
+  - OpenWeather: 
+
+-AI was used for the ideas, nothing else!!!(just for citation)
+
+
