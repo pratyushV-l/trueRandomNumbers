@@ -15,7 +15,9 @@ At the beginning of this project, I really wanted to make the random number indi
 
 Now I am currently utilizing 5 APIs(that all contribute to the randomness):
   - Random.org: It just provided a random number everytime it is called
-  - OpenWeather: 
+  - OpenWeather: Provides Solar Radiation, which is updated every hour(I believe), allowing for further randomness
+  - Finnhub: Provided detailes stock market tracking(in this case AAPL), and changes every hour, and as everyone knows, the most unpredictable thing in the world is the stock market.
+  - NASA: NASA provides a astronomy photo of the day, meaning I can see the length of the photo, further contributing to the randomness, changing everyday!
 
 -AI was used for the ideas, nothing else!!!(just for citation)
 
