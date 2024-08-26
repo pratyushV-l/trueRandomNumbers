@@ -29,11 +29,16 @@ def get_stock_price(symbol):
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
-        return data['c']  # Current price - ALSO WHERE THE ERROR WAS!
+        return data['c']  # Current price
     else:
         return 0  # Fallback in case of API failure
+        
+def get_traffic_data(lat, lon, api_key):
+    url = f'https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={lat},{lon}&key={api_key}'
+    response = requests.get(url)
 
-def generate_random_number(api_key, stock_symbol):
+
+def generate_random_number(api_key, stock_symbol, traffic_api_key):
     uptime = get_system_uptime()
     external_random = get_external_random_number()
     solar_radiation = get_solar_radiation(12.9716, 77.5946, api_key)  # Example coordinates for Bengaluru
@@ -41,13 +46,13 @@ def generate_random_number(api_key, stock_symbol):
     current_time = time.time()
     random_factor = random.random()
     seed = int((uptime + external_random + solar_radiation + stock_price + current_time + random_factor) * 1000) % 100
-    random_number = (seed * 9301 + 49297) % 233280
+    random_number = (seed * 9301 + 49297) % 233280 # Oh yeah, sry forgot to mention, to add to the randomness, i added a few random numbers here at the beginning
     return random_number / 233280
 
 @app.route('/')
 def index():
     api_key = 'your_openweathermap_api_key'  # Replace with your actual API key
-    stock_symbol = 'AAPL'  # Example stock symbol for Apple Inc.
+    stock_symbol = 'AAPL'
     random_number = generate_random_number(api_key, stock_symbol)
     return render_template_string('''
         <!doctype html>
@@ -104,3 +109,4 @@ def index():
           </body>
         </html>
     ''', random_number=random_number)
+
