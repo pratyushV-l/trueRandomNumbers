@@ -25,13 +25,13 @@ def get_solar_radiation(lat, lon, api_key):
         return 0  # Fallback in case of API failure
 
 def get_stock_price(symbol):
-    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=your_api_token_for_finnhub'
+    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=cr67dg9r01qnuep51fb0cr67dg9r01qnuep51fbg'
     response = requests.get(url)
     if response.status_code == 200:
-        data = response()
-        return data['p']  # Current price
+        data = response.json()
+        return data['c']  # Current price - ALSO WHERE THE ERROR WAS!
     else:
-        return 0  # Currently falling back in case of API failure
+        return 0  # Fallback in case of API failure
 
 def generate_random_number(api_key, stock_symbol):
     uptime = get_system_uptime()
