@@ -6,8 +6,6 @@ import math
 
 app = Flask(__name__)
 
-# There are a lot of API Keys, that have just been replaced with API, please note that when this project is in it's final stages, I will ship it with the name of the Key provider, for mutual convenience
-
 # Calculates how long the system(or the code) has been running for
 def get_system_uptime():
     return time.time() - time.monotonic()
@@ -50,7 +48,7 @@ def get_traffic_data(lat, lon, api_key):
     else:
         return 0  # Fallback in case of API failure
 
-#Just tells you tme current amount of news articles published
+# Just tells you the current amount of news articles published
 def get_news_headlines(api_key):
     url = f'https://newsapi.org/v2/top-headlines?country=in&apiKey={api_key}'
     response = requests.get(url)
@@ -71,7 +69,7 @@ def get_astronomy_data(api_key):
         return 0  # Fallback in case of API failure
 
 # Inputs all of these values, using them as a seed for one last random num generation
-def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon):
+def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num):
     uptime = get_system_uptime()
     external_random = get_external_random_number()
     solar_radiation = get_solar_radiation(lat, lon, api_key)
@@ -83,9 +81,9 @@ def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key,
     random_factor = random.random()
     seed = int((uptime + external_random + traffic_speed + news_headlines + astronomy_val + solar_radiation + stock_price + current_time + random_factor) * 1000) % 100
     random_number = ((seed * 9301 + 49297) % 233280)
-    final_number = math.floor((random_number / 233280)*10)
+    final_number = math.floor((random_number / 233280) * (end_num+1 - start_num) + start_num)
     return final_number
-# Please excuse me for all the bad code after this
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     api_key = 'api'  # Replace with your actual API key
@@ -96,13 +94,17 @@ def index():
     stock_symbol = 'AAPL'  # Default value
     lat = '12.9716'  # Default latitude (Bengaluru)
     lon = '77.5946'  # Default longitude (Bengaluru)
+    start_num = 0  # Default start number
+    end_num = 100  # Default end number
 
     if request.method == 'POST':
         stock_symbol = request.form.get('stock_symbol', 'AAPL').upper()
         lat = request.form.get('latitude', '12.9716')
         lon = request.form.get('longitude', '77.5946')
+        start_num = int(request.form.get('start_num', '0'))
+        end_num = int(request.form.get('end_num', '100'))
 
-    random_number = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon)
+    random_number = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num)
     return render_template_string('''
         <!doctype html>
         <html lang="en">
@@ -172,6 +174,10 @@ def index():
                 <br>
                 <input type="text" name="longitude" placeholder="Enter longitude" value="{{ lon }}">
                 <br>
+                <input type="text" name="start_num" placeholder="Enter start number" value="{{ start_num }}">
+                <br>
+                <input type="text" name="end_num" placeholder="Enter end number" value="{{ end_num }}">
+                <br>
                 <button type="submit">Generate Number</button>
               </form>
               <p>Random Number: {{ random_number }}</p>
@@ -179,7 +185,7 @@ def index():
             </div>
           </body>
         </html>
-    ''', random_number=random_number, stock_symbol=stock_symbol, lat=lat, lon=lon)
+    ''', random_number=random_number, stock_symbol=stock_symbol, lat=lat, lon=lon, start_num=start_num, end_num=end_num)
 
 if __name__ == '__main__':
     app.run(debug=True)
