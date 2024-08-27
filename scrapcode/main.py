@@ -93,16 +93,12 @@ def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key,
 
 # Rolls a die (1 to 6) using a random number generator
 def dice_rolled():
-    die_val = generate_random_number("your values(not shared due to API)
+    die_val = generate_random_number('apis')
     return die_val
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # API keys
-    api_key = '2479d6c9c8ee8fd0cd6e32746eedece8'
-    traffic_api_key = 'mAeLHDiXNwGEHtOPcalc1pDOtLryfWTc'
-    news_api_key = '02a7277e1f1d4cf78751d96a7b31a13a'
-    astronomy_api_key = 'fX3zmCUkxfVwWSxqRykhnzS0IxkeUeAOD6Kde9f4'
 
     # Default values
     stock_symbol = 'AAPL'
@@ -129,8 +125,7 @@ def index():
             # Roll dice
             dice_result = dice_rolled()
         else:
-            # Handle buttons with specific values
-            button_value = request.form.get('button_value')
+            button_value = request.form.get('buttonvalue')
             if button_value:
                 start_num = 1
                 end_num = int(button_value)
@@ -234,17 +229,17 @@ def index():
                 <br>
                 <input type="text" name="end_num" placeholder="End Number" value="{{ end_num }}">
                 <br>
-                <button type="submit" name="button_value" value="2" class="small-button">2</button>
-                <button type="submit" name="button_value" value="3" class="small-button">3</button>
-                <button type="submit" name="button_value" value="4" class="small-button">4</button>
-                <button type="submit" name="button_value" value="5" class="small-button">5</button>
-                <button type="submit" name="button_value" value="10" class="small-button">10</button>
-                <button type="submit" name="button_value" value="15" class="small-button">15</button>
-                <button type="submit" name="button_value" value="50" class="small-button">50</button>
-                <button type="submit" name="button_value" value="100" class="small-button">100</button>
-                <button type="submit" name="button_value" value="500" class="small-button">500</button>
-                <button type="submit" name="button_value" value="1000" class="small-button">1000</button>
-                <button type="submit" name="button_value" value="999999" class="small-button">999999</button>
+                <button type="submit" name="buttonvalue" value=2 class="small-button">2</button>
+                <button type="submit" name="buttonvalue" value=3 class="small-button">3</button>
+                <button type="submit" name="buttonvalue" value=4 class="small-button">4</button>
+                <button type="submit" name="buttonvalue" value=5 class="small-button">5</button>
+                <button type="submit" name="buttonvalue" value=10 class="small-button">10</button>
+                <button type="submit" name="buttonvalue" value=15 class="small-button">15</button>
+                <button type="submit" name="buttonvalue" value=50 class="small-button">50</button>
+                <button type="submit" name="buttonvalue" value=100 class="small-button">100</button>
+                <button type="submit" name="buttonvalue" value=500 class="small-button">500</button>
+                <button type="submit" name="buttonvalue" value=1000 class="small-button">1000</button>
+                <button type="submit" name="buttonvalue" value=999999 class="small-button">999999</button>
                 <br>
                 <button type="submit" name="generate_number" class="generate-button">Generate Random Number</button>
                 <br>
