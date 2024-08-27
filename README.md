@@ -33,6 +33,16 @@ Now I am currently utilizing 6 APIs(that all contribute to the randomness):
 - Finalize and ship the product
 - ADD MORE RANDOM FEATURES!!!
 
+## Color Scheme
+- 540b0e
+- 9e2a2b
+- e09f3e
+- fff3b0
+- 335c67
+
+![image](https://github.com/user-attachments/assets/5926e532-03b1-4c8c-8182-c2b091408e4c)
+
+
 ## Citations
 - https://openweathermap.org/api/one-call-3
 - https://finnhub.io/docs/api
