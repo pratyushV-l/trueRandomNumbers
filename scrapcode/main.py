@@ -5,9 +5,13 @@ from flask import Flask, render_template_string, request
 
 app = Flask(__name__)
 
+# There are a lot of API Keys, that have just been replaced with API, please note that when this project is in it's final stages, I will ship it with the name of the Key provider, for mutual convenience
+
+# Calculates how long the system(or the code) has been running for
 def get_system_uptime():
     return time.time() - time.monotonic()
 
+# Uses an API key to just get a random number, this is just an extra feature in case of API failure in everything else
 def get_external_random_number():
     response = requests.get('https://www.random.org/integers/?num=1&min=0&max=100&col=1&base=10&format=plain&rnd=new')
     if response.status_code == 200:
@@ -15,6 +19,7 @@ def get_external_random_number():
     else:
         return 0  # Fallback in case of API failure
 
+# Calculates the amount of solar radiation in the lat & lon locations provided
 def get_solar_radiation(lat, lon, api_key):
     url = f'https://api.openweathermap.org/data/2.5/solar_radiation?lat={lat}&lon={lon}&appid={api_key}'
     response = requests.get(url)
@@ -24,6 +29,7 @@ def get_solar_radiation(lat, lon, api_key):
     else:
         return 0  # Fallback in case of API failure
 
+# Shows the current value of a stock of your choice, further contributing to the randomness
 def get_stock_price(symbol):
     url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=key'
     response = requests.get(url)
@@ -32,7 +38,8 @@ def get_stock_price(symbol):
         return data['c']  # Current price
     else:
         return 0  # Fallback in case of API failure
-        
+
+# Also uses lat & lon data, but to show speed of traffic in an area
 def get_traffic_data(lat, lon, api_key):
     url = f'https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={lat},{lon}&key={api_key}'
     response = requests.get(url)
@@ -41,7 +48,8 @@ def get_traffic_data(lat, lon, api_key):
         return data['flowSegmentData']['currentSpeed']
     else:
         return 0  # Fallback in case of API failure
-        
+
+#Just tells you tme current amount of news articles published
 def get_news_headlines(api_key):
     url = f'https://newsapi.org/v2/top-headlines?country=in&apiKey={api_key}'
     response = requests.get(url)
@@ -50,7 +58,8 @@ def get_news_headlines(api_key):
         return len(data['articles'])  # Number of articles
     else:
         return 0  # Fallback in case of API failure
-    
+
+# Gets the length of NASA's picture of the day, which is random, everyday
 def get_astronomy_data(api_key):
     url = f'https://api.nasa.gov/planetary/apod?api_key={api_key}'
     response = requests.get(url)
@@ -60,6 +69,7 @@ def get_astronomy_data(api_key):
     else:
         return 0  # Fallback in case of API failure
 
+# Inputs all of these values, using them as a seed for one last random num generation
 def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon):
     uptime = get_system_uptime()
     external_random = get_external_random_number()
@@ -73,7 +83,7 @@ def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key,
     seed = int((uptime + external_random + traffic_speed + news_headlines + astronomy_val + solar_radiation + stock_price + current_time + random_factor) * 1000) % 100
     random_number = (seed * 9301 + 49297) % 233280
     return random_number / 233280
-
+# Please excuse me for all the bad code after this
 @app.route('/', methods=['GET', 'POST'])
 def index():
     api_key = 'key'  # Replace with your actual API key
