@@ -2,6 +2,7 @@ import time
 import random
 import requests
 from flask import Flask, render_template_string, request
+import math
 
 app = Flask(__name__)
 
@@ -39,7 +40,7 @@ def get_stock_price(symbol):
     else:
         return 0  # Fallback in case of API failure
 
-# Also uses lat & lon data, but to show speed of traffic in an area        
+# Also uses lat & lon data, but to show speed of traffic in an area
 def get_traffic_data(lat, lon, api_key):
     url = f'https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={lat},{lon}&key={api_key}'
     response = requests.get(url)
@@ -49,7 +50,7 @@ def get_traffic_data(lat, lon, api_key):
     else:
         return 0  # Fallback in case of API failure
 
-#Just tells you tme current amount of news articles published        
+#Just tells you tme current amount of news articles published
 def get_news_headlines(api_key):
     url = f'https://newsapi.org/v2/top-headlines?country=in&apiKey={api_key}'
     response = requests.get(url)
@@ -59,7 +60,7 @@ def get_news_headlines(api_key):
     else:
         return 0  # Fallback in case of API failure
 
-# Gets the length of NASA's picture of the day, which is random, everyday    
+# Gets the length of NASA's picture of the day, which is random, everyday
 def get_astronomy_data(api_key):
     url = f'https://api.nasa.gov/planetary/apod?api_key={api_key}'
     response = requests.get(url)
@@ -81,8 +82,9 @@ def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key,
     current_time = time.time()
     random_factor = random.random()
     seed = int((uptime + external_random + traffic_speed + news_headlines + astronomy_val + solar_radiation + stock_price + current_time + random_factor) * 1000) % 100
-    random_number = (seed * 9301 + 49297) % 233280
-    return random_number / 233280
+    random_number = ((seed * 9301 + 49297) % 233280)
+    final_number = math.floor((random_number / 233280)*10)
+    return final_number
 # Please excuse me for all the bad code after this
 @app.route('/', methods=['GET', 'POST'])
 def index():
