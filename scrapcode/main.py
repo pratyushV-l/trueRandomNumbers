@@ -158,15 +158,19 @@ def index():
               }
               h1 {
                 margin-bottom: 20px;
+                color: 540b0e
               }
               p {
                 font-size: 1.5em;
                 margin-bottom: 20px;
+                color: 540b0e
               }
               input[type="text"] {
                 padding: 10px;
                 font-size: 1em;
+                color: white;
                 margin-bottom: 20px;
+                background: #335c67;
                 border: 1px solid #ccc;
                 border-radius: 5px;
                 width: 200px;
@@ -182,13 +186,13 @@ def index():
                 transition: background-color 0.3s ease;
               }
               .generate-button {
-                background-color: #007bff;
+                background-color: #335c67;
               }
               .generate-button:hover {
                 background-color: #0056b3;
               }
               .roll-button {
-                background-color: #28a745;
+                background-color: #9e2a2b;
                 font-size: 0.9em; /* Smaller font size for the Roll Dice button */
                 padding: 8px 16px; /* Smaller padding for the Roll Dice button */
               }
@@ -196,7 +200,7 @@ def index():
                 background-color: #218838;
               }
               .small-button {
-                background-color: #28a745;
+                background-color: #9e2a2b;
                 font-size: 0.7em;
                 padding: 5px 10px;
                 margin-bottom: 10px;
