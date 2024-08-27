@@ -31,7 +31,7 @@ def get_solar_radiation(lat, lon, api_key):
 
 # Shows the current value of a stock of your choice, further contributing to the randomness
 def get_stock_price(symbol):
-    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=key'
+    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=api'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
@@ -39,7 +39,7 @@ def get_stock_price(symbol):
     else:
         return 0  # Fallback in case of API failure
 
-# Also uses lat & lon data, but to show speed of traffic in an area
+# Also uses lat & lon data, but to show speed of traffic in an area        
 def get_traffic_data(lat, lon, api_key):
     url = f'https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={lat},{lon}&key={api_key}'
     response = requests.get(url)
@@ -49,7 +49,7 @@ def get_traffic_data(lat, lon, api_key):
     else:
         return 0  # Fallback in case of API failure
 
-#Just tells you tme current amount of news articles published
+#Just tells you tme current amount of news articles published        
 def get_news_headlines(api_key):
     url = f'https://newsapi.org/v2/top-headlines?country=in&apiKey={api_key}'
     response = requests.get(url)
@@ -59,7 +59,7 @@ def get_news_headlines(api_key):
     else:
         return 0  # Fallback in case of API failure
 
-# Gets the length of NASA's picture of the day, which is random, everyday
+# Gets the length of NASA's picture of the day, which is random, everyday    
 def get_astronomy_data(api_key):
     url = f'https://api.nasa.gov/planetary/apod?api_key={api_key}'
     response = requests.get(url)
@@ -86,10 +86,10 @@ def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key,
 # Please excuse me for all the bad code after this
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    api_key = 'key'  # Replace with your actual API key
-    traffic_api_key = 'key'
-    news_api_key = 'key'
-    astronomy_api_key = 'key'
+    api_key = 'api'  # Replace with your actual API key
+    traffic_api_key = 'api'
+    news_api_key = 'api'
+    astronomy_api_key = 'api'
 
     stock_symbol = 'AAPL'  # Default value
     lat = '12.9716'  # Default latitude (Bengaluru)
@@ -153,6 +153,11 @@ def index():
               button:hover {
                 background-color: #0056b3;
               }
+              .note {
+                margin-top: 20px;
+                font-size: 1em;
+                color: #6c757d;
+              }
             </style>
           </head>
           <body>
@@ -168,6 +173,7 @@ def index():
                 <button type="submit">Generate Number</button>
               </form>
               <p>Random Number: {{ random_number }}</p>
+              <p class="note">To stop this number from being random, you would need to change the the time, weather, stock market, traffic, and literal space.</p>
             </div>
           </body>
         </html>
