@@ -170,7 +170,6 @@ def index():
                 width: 200px;
               }
               button {
-                background-color: #007bff;
                 color: white;
                 border: none;
                 padding: 10px 20px;
@@ -178,9 +177,21 @@ def index():
                 border-radius: 5px;
                 cursor: pointer;
                 margin: 5px;
+                transition: background-color 0.3s ease;
               }
-              button:hover {
+              .generate-button {
+                background-color: #007bff;
+              }
+              .generate-button:hover {
                 background-color: #0056b3;
+              }
+              .roll-button {
+                background-color: #28a745;
+                font-size: 0.9em; /* Smaller font size for the Roll Dice button */
+                padding: 8px 16px; /* Smaller padding for the Roll Dice button */
+              }
+              .roll-button:hover {
+                background-color: #218838;
               }
               .note {
                 margin-top: 20px;
@@ -207,8 +218,9 @@ def index():
                 <br>
                 <input type="text" name="end_num" placeholder="End Number" value="{{ end_num }}">
                 <br>
-                <button type="submit" name="generate_number">Generate Random Number</button>
-                <button type="submit" name="roll_dice">Roll Dice</button>
+                <button type="submit" name="generate_number" class="generate-button">Generate Random Number</button>
+                <br>
+                <button type="submit" name="roll_dice" class="roll-button">Roll Dice</button>
               </form>
               {% if random_number is not none %}
                 <p>Random Number: {{ random_number }}</p>
