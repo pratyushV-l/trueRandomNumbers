@@ -99,10 +99,10 @@ def dice_rolled():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # API keys
-    api_key = 'api'
-    traffic_api_key = 'api'
-    news_api_key = 'api'
-    astronomy_api_key = 'api'
+    api_key = '2479d6c9c8ee8fd0cd6e32746eedece8'
+    traffic_api_key = 'mAeLHDiXNwGEHtOPcalc1pDOtLryfWTc'
+    news_api_key = '02a7277e1f1d4cf78751d96a7b31a13a'
+    astronomy_api_key = 'fX3zmCUkxfVwWSxqRykhnzS0IxkeUeAOD6Kde9f4'
 
     # Default values
     stock_symbol = 'AAPL'
@@ -110,9 +110,9 @@ def index():
     lon = '77.5946'
     start_num = 0
     end_num = 100
-
     random_number = None
     dice_result = None
+    randNum2 = None
 
     if request.method == 'POST':
         if 'generate_number' in request.form:
@@ -128,6 +128,13 @@ def index():
         elif 'roll_dice' in request.form:
             # Roll dice
             dice_result = dice_rolled()
+        else:
+            # Handle buttons with specific values
+            button_value = request.form.get('button_value')
+            if button_value:
+                start_num = 1
+                end_num = int(button_value)
+                randNum2 = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num)
 
     return render_template_string('''
         <!doctype html>
@@ -193,6 +200,15 @@ def index():
               .roll-button:hover {
                 background-color: #218838;
               }
+              .small-button {
+                background-color: #28a745;
+                font-size: 0.7em;
+                padding: 5px 10px;
+                margin-bottom: 10px;
+              }
+              .small-button:hover {
+                background-color: #218838;
+              }
               .note {
                 margin-top: 20px;
                 font-size: 1em;
@@ -218,6 +234,18 @@ def index():
                 <br>
                 <input type="text" name="end_num" placeholder="End Number" value="{{ end_num }}">
                 <br>
+                <button type="submit" name="button_value" value="2" class="small-button">2</button>
+                <button type="submit" name="button_value" value="3" class="small-button">3</button>
+                <button type="submit" name="button_value" value="4" class="small-button">4</button>
+                <button type="submit" name="button_value" value="5" class="small-button">5</button>
+                <button type="submit" name="button_value" value="10" class="small-button">10</button>
+                <button type="submit" name="button_value" value="15" class="small-button">15</button>
+                <button type="submit" name="button_value" value="50" class="small-button">50</button>
+                <button type="submit" name="button_value" value="100" class="small-button">100</button>
+                <button type="submit" name="button_value" value="500" class="small-button">500</button>
+                <button type="submit" name="button_value" value="1000" class="small-button">1000</button>
+                <button type="submit" name="button_value" value="999999" class="small-button">999999</button>
+                <br>
                 <button type="submit" name="generate_number" class="generate-button">Generate Random Number</button>
                 <br>
                 <button type="submit" name="roll_dice" class="roll-button">Roll Dice</button>
@@ -228,11 +256,14 @@ def index():
               {% if dice_result is not none %}
                 <div id="dice-result">Dice Rolled: {{ dice_result }}</div>
               {% endif %}
+              {% if randNum2 is not none %}
+                <p>Random Number: {{ randNum2 }}</p>
+              {% endif %}
               <div class="note">Note: Use stock symbols (e.g., AAPL) and valid coordinates for accurate results.</div>
             </div>
           </body>
         </html>
-    ''', random_number=random_number, dice_result=dice_result, stock_symbol=stock_symbol, lat=lat, lon=lon, start_num=start_num, end_num=end_num)
+    ''', random_number=random_number, dice_result=dice_result, stock_symbol=stock_symbol, lat=lat, lon=lon, start_num=start_num, end_num=end_num, randNum2=randNum2)
 
 if __name__ == '__main__':
     app.run(debug=True)
