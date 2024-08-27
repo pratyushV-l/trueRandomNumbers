@@ -6,11 +6,13 @@ import math
 
 app = Flask(__name__)
 
-# Calculates how long the system(or the code) has been running for
+# Helper functions
+
+# Calculates how long the system (or the code) has been running for
 def get_system_uptime():
     return time.time() - time.monotonic()
 
-# Uses an API key to just get a random number, this is just an extra feature in case of API failure in everything else
+# Uses an API to get a random number; this is an extra feature in case other APIs fail
 def get_external_random_number():
     response = requests.get('https://www.random.org/integers/?num=1&min=0&max=100&col=1&base=10&format=plain&rnd=new')
     if response.status_code == 200:
@@ -18,7 +20,7 @@ def get_external_random_number():
     else:
         return 0  # Fallback in case of API failure
 
-# Calculates the amount of solar radiation in the lat & lon locations provided
+# Calculates the amount of solar radiation at the given latitude and longitude
 def get_solar_radiation(lat, lon, api_key):
     url = f'https://api.openweathermap.org/data/2.5/solar_radiation?lat={lat}&lon={lon}&appid={api_key}'
     response = requests.get(url)
@@ -28,7 +30,7 @@ def get_solar_radiation(lat, lon, api_key):
     else:
         return 0  # Fallback in case of API failure
 
-# Shows the current value of a stock of your choice, further contributing to the randomness
+# Retrieves the current stock price for the given stock symbol
 def get_stock_price(symbol):
     url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=api'
     response = requests.get(url)
@@ -38,7 +40,7 @@ def get_stock_price(symbol):
     else:
         return 0  # Fallback in case of API failure
 
-# Also uses lat & lon data, but to show speed of traffic in an area
+# Retrieves traffic data (current speed) for the given latitude and longitude
 def get_traffic_data(lat, lon, api_key):
     url = f'https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={lat},{lon}&key={api_key}'
     response = requests.get(url)
@@ -48,7 +50,7 @@ def get_traffic_data(lat, lon, api_key):
     else:
         return 0  # Fallback in case of API failure
 
-# Just tells you the current amount of news articles published
+# Retrieves the number of current news headlines for a specified country
 def get_news_headlines(api_key):
     url = f'https://newsapi.org/v2/top-headlines?country=in&apiKey={api_key}'
     response = requests.get(url)
@@ -58,7 +60,7 @@ def get_news_headlines(api_key):
     else:
         return 0  # Fallback in case of API failure
 
-# Gets the length of NASA's picture of the day, which is random, everyday
+# Retrieves the length of NASA's Astronomy Picture of the Day title
 def get_astronomy_data(api_key):
     url = f'https://api.nasa.gov/planetary/apod?api_key={api_key}'
     response = requests.get(url)
@@ -68,7 +70,7 @@ def get_astronomy_data(api_key):
     else:
         return 0  # Fallback in case of API failure
 
-# Inputs all of these values, using them as a seed for one last random num generation
+# Combines all the above data to generate a random number within a specified range
 def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num):
     uptime = get_system_uptime()
     external_random = get_external_random_number()
@@ -79,32 +81,54 @@ def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key,
     astronomy_val = get_astronomy_data(astronomy_api_key)
     current_time = time.time()
     random_factor = random.random()
+    
+    # Calculate a seed value based on various data points and random factors
     seed = int((uptime + external_random + traffic_speed + news_headlines + astronomy_val + solar_radiation + stock_price + current_time + random_factor) * 1000) % 100
+    
+    # Generate a pseudo-random number using the seed
     random_number = ((seed * 9301 + 49297) % 233280)
-    final_number = math.floor((random_number / 233280) * (end_num+1 - start_num) + start_num)
+    final_number = math.floor((random_number / 233280) * (end_num + 1 - start_num) + start_num)
+    
     return final_number
+
+# Rolls a die (1 to 6) using a random number generator
+def dice_rolled():
+    die_val = generate_random_number("your values(not shared due to API)
+    return die_val
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    api_key = 'api'  # Replace with your actual API key
+    # API keys
+    api_key = 'api'
     traffic_api_key = 'api'
     news_api_key = 'api'
     astronomy_api_key = 'api'
 
-    stock_symbol = 'AAPL'  # Default value
-    lat = '12.9716'  # Default latitude (Bengaluru)
-    lon = '77.5946'  # Default longitude (Bengaluru)
-    start_num = 0  # Default start number
-    end_num = 100  # Default end number
+    # Default values
+    stock_symbol = 'AAPL'
+    lat = '12.9716'
+    lon = '77.5946'
+    start_num = 0
+    end_num = 100
+
+    random_number = None
+    dice_result = None
 
     if request.method == 'POST':
-        stock_symbol = request.form.get('stock_symbol', 'AAPL').upper()
-        lat = request.form.get('latitude', '12.9716')
-        lon = request.form.get('longitude', '77.5946')
-        start_num = int(request.form.get('start_num', '0'))
-        end_num = int(request.form.get('end_num', '100'))
+        if 'generate_number' in request.form:
+            # Retrieve and process form data
+            stock_symbol = request.form.get('stock_symbol', 'AAPL').upper()
+            lat = request.form.get('latitude', '12.9716')
+            lon = request.form.get('longitude', '77.5946')
+            start_num = int(request.form.get('start_num', '0'))
+            end_num = int(request.form.get('end_num', '100'))
 
-    random_number = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num)
+            # Generate random number
+            random_number = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num)
+        elif 'roll_dice' in request.form:
+            # Roll dice
+            dice_result = dice_rolled()
+
     return render_template_string('''
         <!doctype html>
         <html lang="en">
@@ -153,6 +177,7 @@ def index():
                 font-size: 1em;
                 border-radius: 5px;
                 cursor: pointer;
+                margin: 5px;
               }
               button:hover {
                 background-color: #0056b3;
@@ -161,6 +186,10 @@ def index():
                 margin-top: 20px;
                 font-size: 1em;
                 color: #6c757d;
+              }
+              #dice-result {
+                font-size: 1.5em;
+                margin-top: 20px;
               }
             </style>
           </head>
@@ -174,18 +203,24 @@ def index():
                 <br>
                 <input type="text" name="longitude" placeholder="Enter longitude" value="{{ lon }}">
                 <br>
-                <input type="text" name="start_num" placeholder="Enter start number" value="{{ start_num }}">
+                <input type="text" name="start_num" placeholder="Start Number" value="{{ start_num }}">
                 <br>
-                <input type="text" name="end_num" placeholder="Enter end number" value="{{ end_num }}">
+                <input type="text" name="end_num" placeholder="End Number" value="{{ end_num }}">
                 <br>
-                <button type="submit">Generate Number</button>
+                <button type="submit" name="generate_number">Generate Random Number</button>
+                <button type="submit" name="roll_dice">Roll Dice</button>
               </form>
-              <p>Random Number: {{ random_number }}</p>
-              <p class="note">To stop this number from being random, you would need to change the the time, weather, stock market, traffic, and literal space.</p>
+              {% if random_number is not none %}
+                <p>Random Number: {{ random_number }}</p>
+              {% endif %}
+              {% if dice_result is not none %}
+                <div id="dice-result">Dice Rolled: {{ dice_result }}</div>
+              {% endif %}
+              <div class="note">Note: Use stock symbols (e.g., AAPL) and valid coordinates for accurate results.</div>
             </div>
           </body>
         </html>
-    ''', random_number=random_number, stock_symbol=stock_symbol, lat=lat, lon=lon, start_num=start_num, end_num=end_num)
+    ''', random_number=random_number, dice_result=dice_result, stock_symbol=stock_symbol, lat=lat, lon=lon, start_num=start_num, end_num=end_num)
 
 if __name__ == '__main__':
     app.run(debug=True)
