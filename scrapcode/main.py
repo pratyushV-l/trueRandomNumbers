@@ -141,7 +141,7 @@ def index():
             <style>
               body {
                 font-family: Arial, sans-serif;
-                background-color: #f8f9fa;
+                background-color: #fff3b0;
                 color: #343a40;
                 display: flex;
                 justify-content: center;
@@ -151,7 +151,7 @@ def index():
               }
               .container {
                 text-align: center;
-                background: #ffffff;
+                background: #e09f3e;
                 padding: 20px;
                 border-radius: 8px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
