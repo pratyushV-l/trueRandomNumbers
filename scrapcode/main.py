@@ -156,7 +156,8 @@ def index():
             if items:
                 item_list = [item.strip() for item in items.split(',')]
                 if item_list:
-                    selected_item = random.choice(item_list)
+                    random_number = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, 0, len(item_list)-1)
+                    selected_item = item_list[random_number]
         else:
             button_value = request.form.get('buttonvalue')
             if button_value:
