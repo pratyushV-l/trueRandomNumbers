@@ -32,7 +32,7 @@ def get_solar_radiation(lat, lon, api_key):
 
 # Retrieves the current stock price for the given stock symbol
 def get_stock_price(symbol):
-    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=api!!'
+    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=api'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
@@ -122,6 +122,7 @@ def index():
     random_number = None
     dice_result = None
     randNum2 = None
+    selected_item = None
 
     if request.method == 'POST':
         if 'generate_number' in request.form:
@@ -137,12 +138,13 @@ def index():
         elif 'roll_dice' in request.form:
             # Roll dice
             dice_result = dice_rolled(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num)
-        else:
-            button_value = request.form.get('buttonvalue')
-            if button_value:
-                start_num = 1
-                end_num = int(button_value)
-                randNum2 = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num)
+        elif 'item_button' in request.form:
+            # Handle the item selector button(yes i put handle, cause i know programming vocab!)
+            items = request.form.get('item_list', '')
+            if items:
+                item_list = [item.strip() for item in items.split(',')]
+                if item_list:
+                    selected_item = random.choice(item_list)
 
     return render_template_string('''
         <!doctype html>
@@ -178,7 +180,7 @@ def index():
                 margin-bottom: 20px;
                 color: 540b0e
               }
-              input[type="text"] {
+              input[type="text"], textarea {
                 padding: 10px;
                 font-size: 1em;
                 color: white;
@@ -206,8 +208,8 @@ def index():
               }
               .roll-button {
                 background-color: #9e2a2b;
-                font-size: 0.9em; /* Smaller font size for the Roll Dice button */
-                padding: 8px 16px; /* Smaller padding for the Roll Dice button */
+                font-size: 0.9em;
+                padding: 8px 16px;
               }
               .roll-button:hover {
                 background-color: #218838;
@@ -261,7 +263,10 @@ def index():
                 <button type="submit" name="generate_number" class="generate-button">Generate Random Number</button>
                 <br>
                 <button type="submit" name="roll_dice" class="roll-button">Roll Dice</button>
-                <button type="submit" name="new_button" class="roll-button">New Button</button>
+                <br><br>
+                <textarea name="item_list" placeholder="Enter items separated by commas"></textarea>
+                <br>
+                <button type="submit" name="item_button" class="roll-button">Select Random Item</button>
               </form>
               {% if random_number is not none %}
                 <p>Random Number: {{ random_number }}</p>
@@ -272,11 +277,14 @@ def index():
               {% if randNum2 is not none %}
                 <p>Random Number: {{ randNum2 }}</p>
               {% endif %}
+              {% if selected_item is not none %}
+                <p>Selected Item: {{ selected_item }}</p>
+              {% endif %}
               <div class="note">Note: Use stock symbols (e.g., AAPL) and valid coordinates for accurate results.</div>
             </div>
           </body>
         </html>
-    ''', random_number=random_number, dice_result=dice_result, stock_symbol=stock_symbol, lat=lat, lon=lon, start_num=start_num, end_num=end_num, randNum2=randNum2)
+    ''', random_number=random_number, dice_result=dice_result, stock_symbol=stock_symbol, lat=lat, lon=lon, start_num=start_num, end_num=end_num, randNum2=randNum2, selected_item=selected_item)
 
 if __name__ == '__main__':
     app.run(debug=True)
