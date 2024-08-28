@@ -29,9 +29,9 @@ Now I am currently utilizing 6 APIs(that all contribute to the randomness):
 ## Future Stuff
 - ~Add a small text that shows all the factors that influenced randomness and what the user would need to do to stop the result from being random(eg. "You would have to change the amount of solar radiaton and the traffic to stop this from being random")~
 - ~Allow the user to input some fields like stock market, lat & lon, as well as a number which adds to the seed, allowing for human error(VERY RANDOM)~
-- Add quick features, like dice rolling, name/item picking, and custom value ranges
+- ~Add quick features, like dice rolling, name/item picking, and custom value ranges~
 - Finalize and ship the product
-- ADD MORE RANDOM FEATURES!!!
+- ~ADD MORE RANDOM FEATURES!!!~
 
 ## Color Scheme
 - 540b0e
