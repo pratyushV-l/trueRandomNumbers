@@ -32,7 +32,7 @@ def get_solar_radiation(lat, lon, api_key):
 
 # Retrieves the current stock price for the given stock symbol
 def get_stock_price(symbol):
-    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=api'
+    url = f'https://finnhub.io/api/v1/quote?symbol={symbol}&token=api!!'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
@@ -70,30 +70,43 @@ def get_astronomy_data(api_key):
     else:
         return 0  # Fallback in case of API failure
 
+def get_unsplash_image_dimensions():
+    unsplash_access_key = "api"
+    url = f'https://api.unsplash.com/photos/random?client_id={unsplash_access_key}'
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        width = data['width']
+        height = data['height']
+        return width, height
+    else:
+        return 0, 0  # Fallback in case of API failure
+
 # Combines all the above data to generate a random number within a specified range
 def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num):
     uptime = get_system_uptime()
     external_random = get_external_random_number()
     solar_radiation = get_solar_radiation(lat, lon, api_key)
+    width, height = get_unsplash_image_dimensions()
     stock_price = get_stock_price(stock_symbol)
     traffic_speed = get_traffic_data(lat, lon, traffic_api_key)
     news_headlines = get_news_headlines(news_api_key)
     astronomy_val = get_astronomy_data(astronomy_api_key)
     current_time = time.time()
     random_factor = random.random()
-    
+
     # Calculate a seed value based on various data points and random factors
-    seed = int((uptime + external_random + traffic_speed + news_headlines + astronomy_val + solar_radiation + stock_price + current_time + random_factor) * 1000) % 100
-    
+    seed = int((uptime + external_random + traffic_speed + news_headlines + astronomy_val + solar_radiation + stock_price + current_time + random_factor+ width + height) * 1000) % 100
+
     # Generate a pseudo-random number using the seed
     random_number = ((seed * 9301 + 49297) % 233280)
     final_number = math.floor((random_number / 233280) * (end_num + 1 - start_num) + start_num)
-    
+
     return final_number
 
 # Rolls a die (1 to 6) using a random number generator
-def dice_rolled():
-    die_val = generate_random_number('apis')
+def dice_rolled(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num):
+    die_val = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, 1, 6)
     return die_val
 
 @app.route('/', methods=['GET', 'POST'])
@@ -123,7 +136,7 @@ def index():
             random_number = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num)
         elif 'roll_dice' in request.form:
             # Roll dice
-            dice_result = dice_rolled()
+            dice_result = dice_rolled(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num)
         else:
             button_value = request.form.get('buttonvalue')
             if button_value:
