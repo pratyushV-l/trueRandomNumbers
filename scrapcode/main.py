@@ -261,6 +261,7 @@ def index():
                 <button type="submit" name="generate_number" class="generate-button">Generate Random Number</button>
                 <br>
                 <button type="submit" name="roll_dice" class="roll-button">Roll Dice</button>
+                <button type="submit" name="new_button" class="roll-button">New Button</button>
               </form>
               {% if random_number is not none %}
                 <p>Random Number: {{ random_number }}</p>
