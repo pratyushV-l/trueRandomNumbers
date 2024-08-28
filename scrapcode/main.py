@@ -81,6 +81,16 @@ def get_unsplash_image_dimensions():
         return width, height
     else:
         return 0, 0  # Fallback in case of API failure
+        
+# Retrieves a random activity suggestion from the BoredAPI
+def get_bored_activity():
+    url = 'https://www.boredapi.com/api/activity'
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return data['activity']
+    else:
+        return "Unable to fetch an activity right now. Please try again later."
 
 # Combines all the above data to generate a random number within a specified range
 def generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num):
@@ -123,6 +133,8 @@ def index():
     dice_result = None
     randNum2 = None
     selected_item = None
+    
+    bored_activity = get_bored_activity()
 
     if request.method == 'POST':
         if 'generate_number' in request.form:
@@ -243,6 +255,7 @@ def index():
           <body>
             <div class="container">
               <h1>Random Number Generator</h1>
+              <div class="note">{{ bored_activity }}</div>
               <form method="post">
                 <input type="text" name="stock_symbol" placeholder="Enter stock symbol (e.g., AAPL)" value="{{ stock_symbol }}">
                 <br>
@@ -271,7 +284,7 @@ def index():
                 <button type="submit" name="roll_dice" class="roll-button">Roll Dice</button>
                 <button type="submit" name="new_button" class="roll-button">Select Random Item</button>
                 <br><br>
-                <textarea name="item_list" placeholder="Enter items separated by commas"></textarea>
+                <textarea name="item_list" placeholder="Enter items"></textarea>
               </form>
               {% if random_number is not none %}
                 <p>Random Number: {{ random_number }}</p>
@@ -289,7 +302,7 @@ def index():
             </div>
           </body>
         </html>
-    ''', random_number=random_number, dice_result=dice_result, stock_symbol=stock_symbol, lat=lat, lon=lon, start_num=start_num, end_num=end_num, randNum2=randNum2, selected_item=selected_item)
+    ''', bored_activity=bored_activity, random_number=random_number, dice_result=dice_result, stock_symbol=stock_symbol, lat=lat, lon=lon, start_num=start_num, end_num=end_num, randNum2=randNum2, selected_item=selected_item)
 
 if __name__ == '__main__':
     app.run(debug=True)
