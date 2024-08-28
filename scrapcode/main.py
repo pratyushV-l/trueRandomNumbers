@@ -138,13 +138,19 @@ def index():
         elif 'roll_dice' in request.form:
             # Roll dice
             dice_result = dice_rolled(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num)
-        elif 'item_button' in request.form:
-            # Handle the item selector button(yes i put handle, cause i know programming vocab!)
+        elif 'new_button' in request.form:
+            # Handle the item selector button
             items = request.form.get('item_list', '')
             if items:
                 item_list = [item.strip() for item in items.split(',')]
                 if item_list:
                     selected_item = random.choice(item_list)
+        else:
+            button_value = request.form.get('buttonvalue')
+            if button_value:
+                start_num = 1
+                end_num = int(button_value)
+                randNum2 = generate_random_number(api_key, stock_symbol, news_api_key, traffic_api_key, astronomy_api_key, lat, lon, start_num, end_num)
 
     return render_template_string('''
         <!doctype html>
@@ -266,7 +272,7 @@ def index():
                 <br><br>
                 <textarea name="item_list" placeholder="Enter items separated by commas"></textarea>
                 <br>
-                <button type="submit" name="item_button" class="roll-button">Select Random Item</button>
+                <button type="submit" name="new_button" class="roll-button">Select Random Item</button>
               </form>
               {% if random_number is not none %}
                 <p>Random Number: {{ random_number }}</p>
