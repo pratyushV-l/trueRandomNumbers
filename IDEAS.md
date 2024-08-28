@@ -37,5 +37,7 @@
 - **Profile Details:** Provides detailed information about the generated random user, including location and contact details.
 ---
 # UI Design on Figma
-https://www.figma.com/design/jo85N3HJKmlw700ySU3Wfe/Untitled?node-id=0-1&t=mIIE2qCknoypKGsI-1
-![Untitled](https://github.com/user-attachments/assets/e87df8b9-4d8f-424b-9611-970bed081d54)
+[https://www.figma.com/design/jo85N3HJKmlw700ySU3Wfe/Untitled?node-id=0-1&t=mIIE2qCknoypKGsI-1](https://www.figma.com/design/jo85N3HJKmlw700ySU3Wfe/Untitled?node-id=0-1&t=1Vhwnzvp2Gs41FNH-1)
+
+![image](https://github.com/user-attachments/assets/d5e1ae0a-d2a3-4380-9633-f4b529f073f2)
+
