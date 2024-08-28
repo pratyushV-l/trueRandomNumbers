@@ -35,3 +35,7 @@
 - **Random User Data:** Generates random user profiles, including names, email addresses, and photos.
 - **User Data Customization:** Allows customization of the user data fields based on random number input.
 - **Profile Details:** Provides detailed information about the generated random user, including location and contact details.
+---
+# UI Design on Figma
+https://www.figma.com/design/jo85N3HJKmlw700ySU3Wfe/Untitled?node-id=0-1&t=mIIE2qCknoypKGsI-1
+![Untitled](https://github.com/user-attachments/assets/e87df8b9-4d8f-424b-9611-970bed081d54)
