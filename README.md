@@ -1,5 +1,7 @@
+
+https://github.com/user-attachments/assets/02126770-4007-4d92-8593-4cb24211b6b8
 # trueRandomNumbers
-An actually random number generator: [pratyushv1.pythonanywhere.com](https://pratyushv1.pythonanywhere.com/)
+**An actually random number generator: [pratyushv1.pythonanywhere.com](https://pratyushv1.pythonanywhere.com/)**
 
 >Randomness in Human, Humans are Random
   -by ME
@@ -25,6 +27,12 @@ Now I am currently utilizing 6 APIs(that all contribute to the randomness):
   - NewsAPI: The world is constantly changing, meaning so does the news. This API allows the program to get more random, as the news is not predictable.
 
 -AI was used for the ideas, nothing else!!!(just for citation)
+
+## Images and Videos
+
+---
+![image](https://github.com/user-attachments/assets/57eae7e4-6406-46d4-9633-650abd2a5406)
+---
 
 ## Future Stuff
 - ~Add a small text that shows all the factors that influenced randomness and what the user would need to do to stop the result from being random(eg. "You would have to change the amount of solar radiaton and the traffic to stop this from being random")~
