@@ -25,6 +25,9 @@ Now I am currently utilizing 6 APIs(that all contribute to the randomness):
   - NASA: NASA provides a astronomy photo of the day, meaning I can see the length of the photo, further contributing to the randomness, changing everyday!
   - TomTom: Provides traffic data, and especially here is the default location(Bengaluru), it is definetly random
   - NewsAPI: The world is constantly changing, meaning so does the news. This API allows the program to get more random, as the news is not predictable.
+  - Unsplash API: This generates random images from their catalogue, and their width and height are sued to assist in generating the random numbers!
+  - JokesAPI: Adds a joke everytime you perform an action, they are all related to programming, and are generally funny AND RANDOM!!!
+  - BoredAPI: Adds a random line at the top of the page, kind of like a greeting, it is also random.
 
 -AI was used for the ideas, nothing else!!!(just for citation)
 
